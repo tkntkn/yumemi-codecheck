@@ -3,7 +3,9 @@
   "private": true,
   "scripts": {
     "start": "webpack serve --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "eslint:fix": "eslint src --fix",
+    "prettier:fix": "prettier . --write"
   },
   "devDependencies": {
     "@types/react": "^17.0.27",
