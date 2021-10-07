@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import { Counter } from "./Counter";
+import { App } from "./App";
 import "./main.scss";
 
-ReactDOM.render(<Counter />, document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById("app"));

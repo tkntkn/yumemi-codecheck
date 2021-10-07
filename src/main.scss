@@ -1,11 +1,43 @@
-.app {
-  text-align: center;
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
 
-  &__count {
-    font-size: 14px;
-  }
+.app {
+  display: flex;
+  flex-direction: column;
 
   &__countButton {
     background-color: transparent;
+  }
+}
+
+.header {
+  text-align: center;
+  background-color: lightgreen;
+  color: darkgreen;
+
+  &__title {
+    font-size: 1.5em;
+  }
+}
+
+.prefs {
+  &__title {
+    font-size: 1em;
+    padding-left: 0.5em;
+  }
+
+  &__items {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__item {
+    width: 25%;
+    max-width: 120px;
+    padding-left: 0.5em;
+    box-sizing: border-box;
   }
 }
