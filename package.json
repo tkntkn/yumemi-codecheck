@@ -6,7 +6,8 @@
     "build": "webpack --config webpack.prod.js",
     "eslint:fix": "eslint src --fix",
     "prettier:fix": "prettier . --write",
-    "test": "jest"
+    "test": "jest",
+    "deploy": "npm run test && npm run build && firebase deploy"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
