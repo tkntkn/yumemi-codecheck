@@ -4,35 +4,29 @@ body {
   height: 100%;
 }
 
-.app {
+.App {
   display: flex;
   flex-direction: column;
 
-  &__countButton {
-    background-color: transparent;
+  &__header {
+    text-align: center;
+    background-color: lightgreen;
+    color: darkgreen;
   }
-}
 
-.header {
-  text-align: center;
-  background-color: lightgreen;
-  color: darkgreen;
-
-  &__title {
+  &__headerTitle {
     font-size: 1.5em;
   }
-}
 
-.prefs {
-  &__title {
+  &__prefsTitle {
     font-size: 1em;
     padding-left: 0.5em;
   }
+}
 
-  &__items {
-    display: flex;
-    flex-wrap: wrap;
-  }
+.CheckboxList {
+  display: flex;
+  flex-wrap: wrap;
 
   &__item {
     width: 25%;

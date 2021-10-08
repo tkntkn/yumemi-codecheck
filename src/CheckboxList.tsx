@@ -2,32 +2,29 @@ import { ChangeEvent, ReactElement, useState } from "react";
 
 type Props = {
   items: Array<{ key: string; label: string }>;
-  onChange(keys: string[]): void;
+  onCheck(key: string): void;
+  onUncheck(key: string): void;
 };
 
-export function CheckboxList({ items, onChange }: Props): ReactElement {
-  const [checked, setChecked] = useState<string[]>([]);
-
+export function CheckboxList({
+  items,
+  onCheck,
+  onUncheck,
+}: Props): ReactElement {
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newKey = event.target.value;
-    const newChecked = event.target.checked
-      ? checked.concat(newKey)
-      : checked.filter((key) => key !== newKey);
-    setChecked(newChecked);
-    onChange(newChecked);
+    const key = event.target.value;
+    if (event.target.checked) {
+      onCheck(key);
+    } else {
+      onUncheck(key);
+    }
   };
 
   return (
-    <div className="prefs__items">
+    <div className="CheckboxList">
       {items.map(({ key, label }) => (
-        <label key={key} className="prefs__item">
-          <input
-            type="checkbox"
-            value={key}
-            onChange={handleOnChange}
-            // FIXME: checkされたitemsが多い時にはパフォーマンス課題がある
-            checked={checked.includes(key)}
-          />
+        <label key={key} className="CheckboxList__item">
+          <input type="checkbox" value={key} onChange={handleOnChange} />
           {label}
         </label>
       ))}

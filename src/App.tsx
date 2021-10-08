@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState, useCallback } from "react";
 import { fetchPopulation, fetchPrefectures, Prefecture } from "./api";
 import { CheckboxList } from "./CheckboxList";
 import { ResasPopulationTransitionChart } from "./ResasPopulationTransitionChart";
@@ -26,52 +26,56 @@ function usePrefectures() {
   };
 }
 
+type Population = {
+  code: number;
+  name: string;
+  population: number[];
+};
+
 export function App(): ReactElement {
   const { data: prefList, isLoading, isError } = usePrefectures();
-  const [prefs, setPrefs] = useState<
-    Array<{
-      code: number;
-      name: string;
-      population: number[];
-    }>
-  >([]);
+  const [populations, setPopulations] = useState<Population[]>([]);
 
-  const onPrefChange = async (keys: string[]) => {
-    const prefs = await Promise.all(
-      keys.map(async (key) => {
-        const code = +key;
-        // FIXME: populationをキャッシュしているから問題無いが、毎回選択された全都道府県についてfetchするコードになってしまっている。
-        const population = await fetchPopulation(code);
-        const name = prefList!.find(
-          ({ prefCode }) => prefCode === code
-        )!.prefName;
-        return { code, name, population };
-      })
+  const onPrefAdd = useCallback(
+    async (key: string) => {
+      const population = {
+        code: +key,
+        name: prefList!.find((pref) => pref.prefCode === +key)!.prefName,
+        population: await fetchPopulation(+key),
+      };
+      setPopulations((populations) => populations.concat(population));
+    },
+    [prefList]
+  );
+
+  const onPrefRemove = useCallback((key: string) => {
+    setPopulations((populations) =>
+      populations.filter((population) => population.code !== +key)
     );
-    setPrefs(prefs);
-  };
+  }, []);
 
   if (isError || !prefList) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
 
   return (
-    <div className="app">
-      <header className="header">
-        <h1 className="header__title">人口推移ビューワー</h1>
+    <div className="App">
+      <header className="App__header">
+        <h1 className="App__headerTitle">人口推移ビューワー</h1>
       </header>
-      <div className="prefs">
-        <h2 className="prefs__title">都道府県</h2>
+      <div className="App__prefs">
+        <h2 className="App__prefsTitle">都道府県</h2>
         <CheckboxList
           items={prefList.map(({ prefCode, prefName }) => ({
             key: prefCode.toString(),
             label: prefName,
           }))}
-          onChange={onPrefChange}
+          onCheck={onPrefAdd}
+          onUncheck={onPrefRemove}
         />
       </div>
-      <div className="app__chart">
+      <div className="App__chart">
         <ResasPopulationTransitionChart
-          series={prefs.map(({ name, code, population }) => ({
+          series={populations.map(({ name, code, population }) => ({
             type: "line",
             id: code.toString(),
             name: name,
