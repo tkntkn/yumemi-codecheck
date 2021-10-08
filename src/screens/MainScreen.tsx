@@ -1,11 +1,11 @@
 import { ReactElement, useState, useCallback } from "react";
 import useSWR from "swr";
-import { fetchPrefectures } from "./api";
-import { CheckboxList } from "./CheckboxList";
-import { constructPopulation, Population } from "./helper";
-import { ResasPopulationTransitionChart } from "./ResasPopulationTransitionChart";
+import { fetchPrefectures } from "../utils/api";
+import { CheckboxList } from "../components/CheckboxList";
+import { constructPopulation, Population } from "../utils/helper";
+import { ResasPopulationTransitionChart } from "../components/ResasPopulationTransitionChart";
 
-export function App(): ReactElement {
+export function MainScreen(): ReactElement {
   const { data: prefs, error: prefsError } = useSWR("PREFS", fetchPrefectures);
 
   const [populations, setPopulations] = useState<Population[]>([]);
@@ -29,16 +29,16 @@ export function App(): ReactElement {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App__header">
-        <h1 className="App__headerTitle">人口推移ビューワー</h1>
+    <div className="MainScreen">
+      <header className="MainScreen__header">
+        <h1 className="MainScreen__headerTitle">人口推移ビューワー</h1>
       </header>
       {prefsError ? (
         <div>都道府県データの取得に失敗しました。</div>
       ) : prefs ? (
         <>
-          <div className="App__prefs">
-            <h2 className="App__prefsTitle">都道府県</h2>
+          <div className="MainScreen__prefs">
+            <h2 className="MainScreen__prefsTitle">都道府県</h2>
             <CheckboxList
               items={prefs.map(({ prefCode, prefName }) => ({
                 key: prefCode.toString(),
@@ -48,7 +48,7 @@ export function App(): ReactElement {
               onUncheck={onPrefUnchecked}
             />
           </div>
-          <div className="App__chart">
+          <div className="MainScreen__chart">
             <ResasPopulationTransitionChart
               series={populations.map(({ name, code, population }) => ({
                 type: "line",

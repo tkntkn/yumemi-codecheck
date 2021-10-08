@@ -1,13 +1,13 @@
 import { cleanup, render } from "@testing-library/react";
-import { App } from "./App";
+import { MainScreen } from "./MainScreen";
 
-describe("App", () => {
+describe("MainScreen", () => {
   afterEach(() => {
     cleanup();
   });
 
   test("render", () => {
-    const { getByText } = render(<App />);
+    const { getByText } = render(<MainScreen />);
     getByText("都道府県データのロード中...");
   });
 });

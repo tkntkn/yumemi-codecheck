@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactElement, useState } from "react";
+import { ChangeEvent, ReactElement } from "react";
 
 type Props = {
   items: Array<{ key: string; label: string }>;
