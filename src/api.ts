@@ -14,12 +14,12 @@ export type Prefecture = {
   prefCode: number;
   prefName: string;
 };
-
 let prefecturesCache: Prefecture[];
-
 export async function fetchPrefectures(): Promise<Prefecture[]> {
   if (!prefecturesCache) {
-    const response = (await fetchResas("/api/v1/prefectures")) as any;
+    const response = (await fetchResas("/api/v1/prefectures")) as {
+      result: Prefecture[];
+    };
     const prefectures = response.result;
     prefecturesCache = prefectures;
   }
@@ -28,16 +28,25 @@ export async function fetchPrefectures(): Promise<Prefecture[]> {
 }
 
 type Population = number[];
-
 const populationCache: { [prefCode in number]: Population } = {};
-
 export async function fetchPopulation(prefCode: number): Promise<Population> {
   if (!populationCache[prefCode]) {
     const response = (await fetchResas(
       `/api/v1/population/composition/perYear?prefCode=${prefCode}&cityCode=-`
-    )) as any;
+    )) as {
+      result: {
+        data: Array<{
+          label: string;
+          data: Array<{
+            year: number;
+            value: number;
+          }>;
+        }>;
+      };
+    };
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const population = response.result.data
-      .find(({ label }) => label === "総人口")
+      .find((data) => data.label === "総人口")!
       .data.map((data) => data.value);
     populationCache[prefCode] = population;
   }

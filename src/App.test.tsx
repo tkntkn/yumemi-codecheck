@@ -8,6 +8,6 @@ describe("App", () => {
 
   test("render", () => {
     const { getByText } = render(<App />);
-    getByText("loading...");
+    getByText("都道府県データのロード中...");
   });
 });

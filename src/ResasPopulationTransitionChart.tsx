@@ -4,7 +4,7 @@ import HighchartsReact from "highcharts-react-official";
 
 const defaultOptions = {
   title: {
-    text: "人口推移",
+    text: "ㅤ", // Y軸の「人口数」を見切らせないために空白文字を入れる
   },
   legend: {
     layout: "vertical",
